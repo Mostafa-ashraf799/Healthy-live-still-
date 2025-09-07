@@ -1,0 +1,820 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>موقع الحياة الصحية</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: #333;
+            min-height: 100vh;
+            direction: rtl;
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 20px;
+        }
+
+        .header {
+            background: rgba(255, 255, 255, 0.95);
+            padding: 20px;
+            border-radius: 15px;
+            margin-bottom: 30px;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.2);
+            backdrop-filter: blur(10px);
+        }
+
+        .header h1 {
+            color: #4a5568;
+            text-align: center;
+            font-size: 2.5em;
+            margin-bottom: 10px;
+            background: linear-gradient(45deg, #667eea, #764ba2);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+
+        .nav-buttons {
+            display: flex;
+            justify-content: center;
+            gap: 20px;
+            margin-top: 20px;
+            flex-wrap: wrap;
+        }
+
+        .nav-btn {
+            background: linear-gradient(45deg, #667eea, #764ba2);
+            color: white;
+            border: none;
+            padding: 15px 25px;
+            border-radius: 25px;
+            cursor: pointer;
+            font-size: 16px;
+            font-weight: bold;
+            transition: all 0.3s ease;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.2);
+        }
+
+        .nav-btn:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 8px 25px rgba(0,0,0,0.3);
+        }
+
+        .nav-btn.active {
+            background: linear-gradient(45deg, #48bb78, #38b2ac);
+            transform: scale(1.05);
+        }
+
+        .page {
+            display: none;
+            background: rgba(255, 255, 255, 0.95);
+            border-radius: 15px;
+            padding: 30px;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.2);
+            backdrop-filter: blur(10px);
+            animation: fadeIn 0.5s ease;
+        }
+
+        .page.active {
+            display: block;
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(20px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        .food-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 20px;
+            max-height: 600px;
+            overflow-y: auto;
+        }
+
+        .food-item {
+            background: linear-gradient(135deg, #f093fb 0%, #f5576c 100%);
+            padding: 20px;
+            border-radius: 15px;
+            color: white;
+            transition: transform 0.3s ease;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.1);
+        }
+
+        .food-item:hover {
+            transform: scale(1.05);
+        }
+
+        .food-name {
+            font-size: 18px;
+            font-weight: bold;
+            margin-bottom: 10px;
+        }
+
+        .nutrition-info {
+            display: flex;
+            justify-content: space-between;
+            margin-top: 10px;
+        }
+
+        .calculator-section {
+            background: linear-gradient(135deg, #a8edea 0%, #fed6e3 100%);
+            margin: 20px 0;
+            padding: 25px;
+            border-radius: 15px;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.1);
+        }
+
+        .calc-input {
+            width: 100%;
+            padding: 12px;
+            margin: 10px 0;
+            border: 2px solid #e2e8f0;
+            border-radius: 10px;
+            font-size: 16px;
+            transition: border-color 0.3s ease;
+        }
+
+        .calc-input:focus {
+            outline: none;
+            border-color: #667eea;
+        }
+
+        .calc-btn {
+            background: linear-gradient(45deg, #667eea, #764ba2);
+            color: white;
+            border: none;
+            padding: 12px 25px;
+            border-radius: 10px;
+            cursor: pointer;
+            font-size: 16px;
+            margin: 10px 5px;
+            transition: all 0.3s ease;
+        }
+
+        .calc-btn:hover {
+            transform: translateY(-2px);
+        }
+
+        .result {
+            background: rgba(255, 255, 255, 0.8);
+            padding: 20px;
+            border-radius: 10px;
+            margin-top: 15px;
+            font-weight: bold;
+            font-size: 18px;
+            text-align: center;
+            border: 2px solid #48bb78;
+        }
+
+        .athletes-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(350px, 1fr));
+            gap: 25px;
+        }
+
+        .athlete-card {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            padding: 25px;
+            border-radius: 15px;
+            transition: transform 0.3s ease;
+            box-shadow: 0 8px 25px rgba(0,0,0,0.2);
+        }
+
+        .athlete-card:hover {
+            transform: translateY(-5px);
+        }
+
+        .sport-category {
+            font-size: 20px;
+            font-weight: bold;
+            margin-bottom: 15px;
+            color: #ffd700;
+        }
+
+        .athlete-name {
+            font-size: 16px;
+            margin: 8px 0;
+            background: rgba(255,255,255,0.1);
+            padding: 8px 12px;
+            border-radius: 8px;
+        }
+
+        .search-bar {
+            width: 100%;
+            padding: 15px;
+            margin-bottom: 20px;
+            border: 2px solid #e2e8f0;
+            border-radius: 25px;
+            font-size: 16px;
+            text-align: center;
+        }
+
+        .search-bar:focus {
+            outline: none;
+            border-color: #667eea;
+        }
+
+        .gender-select {
+            margin: 15px 0;
+        }
+
+        .gender-select label {
+            margin: 0 15px;
+            font-weight: bold;
+        }
+
+        .gender-select input[type="radio"] {
+            margin-left: 8px;
+            transform: scale(1.2);
+        }
+
+        .bmi-category {
+            padding: 10px;
+            margin: 10px 0;
+            border-radius: 8px;
+            text-align: center;
+            font-weight: bold;
+        }
+
+        .normal { background-color: #48bb78; color: white; }
+        .underweight { background-color: #4299e1; color: white; }
+        .overweight { background-color: #ed8936; color: white; }
+        .obese { background-color: #e53e3e; color: white; }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <h1>🏃‍♂️ موقع الحياة الصحية 🥗</h1>
+            <p style="text-align: center; color: #666; font-size: 18px;">دليلك الشامل للأكل الصحي والرياضة</p>
+            
+            <div class="nav-buttons">
+                <button class="nav-btn active" onclick="showPage('foods')">الأطعمة الصحية</button>
+                <button class="nav-btn" onclick="showPage('calculator')">حاسبة السعرات</button>
+                <button class="nav-btn" onclick="showPage('athletes')">الرياضيون المشاهير</button>
+            </div>
+        </div>
+
+        <!-- صفحة الأطعمة الصحية -->
+        <div id="foods" class="page active">
+            <h2 style="text-align: center; margin-bottom: 30px; color: #4a5568; font-size: 2em;">🥗 100 نوع من الأطعمة الصحية</h2>
+            <input type="text" class="search-bar" placeholder="ابحث عن الطعام..." onkeyup="filterFoods(this.value)">
+            <div class="food-grid" id="foodGrid">
+                <!-- سيتم إضافة الأطعمة هنا بواسطة JavaScript -->
+            </div>
+        </div>
+
+        <!-- صفحة الحاسبات -->
+        <div id="calculator" class="page">
+            <h2 style="text-align: center; margin-bottom: 30px; color: #4a5568; font-size: 2em;">📊 الحاسبات الصحية</h2>
+            
+            <!-- حاسبة السعرات الحرارية -->
+            <div class="calculator-section">
+                <h3 style="margin-bottom: 20px; color: #4a5568;">🔥 حاسبة السعرات الحرارية اليومية</h3>
+                <div class="gender-select">
+                    <label><input type="radio" name="gender" value="male" checked> ذكر</label>
+                    <label><input type="radio" name="gender" value="female"> أنثى</label>
+                </div>
+                <input type="number" class="calc-input" id="age" placeholder="العمر (سنة)">
+                <input type="number" class="calc-input" id="weight" placeholder="الوزن (كجم)">
+                <input type="number" class="calc-input" id="height" placeholder="الطول (سم)">
+                <select class="calc-input" id="activity">
+                    <option value="1.2">قليل النشاط (عمل مكتبي)</option>
+                    <option value="1.375">نشاط خفيف (تمارين خفيفة 1-3 أيام/أسبوع)</option>
+                    <option value="1.55">نشاط متوسط (تمارين متوسطة 3-5 أيام/أسبوع)</option>
+                    <option value="1.725">نشاط عالي (تمارين قوية 6-7 أيام/أسبوع)</option>
+                    <option value="1.9">نشاط عالي جداً (تمارين قوية + عمل بدني)</option>
+                </select>
+                <button class="calc-btn" onclick="calculateCalories()">احسب السعرات</button>
+                <div id="caloriesResult" class="result" style="display:none;"></div>
+            </div>
+
+            <!-- حاسبة كتلة الجسم -->
+            <div class="calculator-section">
+                <h3 style="margin-bottom: 20px; color: #4a5568;">⚖️ حاسبة مؤشر كتلة الجسم (BMI)</h3>
+                <input type="number" class="calc-input" id="bmiWeight" placeholder="الوزن (كجم)">
+                <input type="number" class="calc-input" id="bmiHeight" placeholder="الطول (سم)">
+                <button class="calc-btn" onclick="calculateBMI()">احسب مؤشر كتلة الجسم</button>
+                <div id="bmiResult" class="result" style="display:none;"></div>
+            </div>
+
+            <!-- حاسبة البروتين -->
+            <div class="calculator-section">
+                <h3 style="margin-bottom: 20px; color: #4a5568;">💪 حاسبة البروتين اليومي</h3>
+                <input type="number" class="calc-input" id="proteinWeight" placeholder="الوزن (كجم)">
+                <select class="calc-input" id="proteinGoal">
+                    <option value="0.8">نمط حياة عادي</option>
+                    <option value="1.2">رياضة خفيفة</option>
+                    <option value="1.6">بناء عضلات</option>
+                    <option value="2.0">رياضيين محترفين</option>
+                </select>
+                <button class="calc-btn" onclick="calculateProtein()">احسب البروتين</button>
+                <div id="proteinResult" class="result" style="display:none;"></div>
+            </div>
+
+            <!-- حاسبة نسبة الدهون -->
+            <div class="calculator-section">
+                <h3 style="margin-bottom: 20px; color: #4a5568;">📏 حاسبة نسبة الدهون (US Navy Method)</h3>
+                <div class="gender-select">
+                    <label><input type="radio" name="fatGender" value="male" checked> ذكر</label>
+                    <label><input type="radio" name="fatGender" value="female"> أنثى</label>
+                </div>
+                <input type="number" class="calc-input" id="fatHeight" placeholder="الطول (سم)">
+                <input type="number" class="calc-input" id="neckCirc" placeholder="محيط الرقبة (سم)">
+                <input type="number" class="calc-input" id="waistCirc" placeholder="محيط الخصر (سم)">
+                <input type="number" class="calc-input" id="hipCirc" placeholder="محيط الوركين (سم) - للنساء فقط" style="display:none;">
+                <button class="calc-btn" onclick="calculateBodyFat()">احسب نسبة الدهون</button>
+                <div id="fatResult" class="result" style="display:none;"></div>
+            </div>
+        </div>
+
+        <!-- صفحة الرياضيين -->
+        <div id="athletes" class="page">
+            <h2 style="text-align: center; margin-bottom: 30px; color: #4a5568; font-size: 2em;">🏆 أشهر الرياضيين في مصر والوطن العربي</h2>
+            <div class="athletes-grid" id="athletesGrid">
+                <!-- سيتم إضافة الرياضيين هنا بواسطة JavaScript -->
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // بيانات الأطعمة الصحية
+        const healthyFoods = [
+            {name: "التفاح", calories: 52, protein: 0.3, carbs: 14, fat: 0.2},
+            {name: "الموز", calories: 89, protein: 1.1, carbs: 23, fat: 0.3},
+            {name: "البرتقال", calories: 47, protein: 0.9, carbs: 12, fat: 0.1},
+            {name: "الفراولة", calories: 32, protein: 0.7, carbs: 8, fat: 0.3},
+            {name: "العنب", calories: 62, protein: 0.6, carbs: 16, fat: 0.2},
+            {name: "الكيوي", calories: 61, protein: 1.1, carbs: 15, fat: 0.5},
+            {name: "المانجو", calories: 60, protein: 0.8, carbs: 15, fat: 0.4},
+            {name: "الأناناس", calories: 50, protein: 0.5, carbs: 13, fat: 0.1},
+            {name: "البابايا", calories: 43, protein: 0.5, carbs: 11, fat: 0.3},
+            {name: "الرمان", calories: 83, protein: 1.7, carbs: 19, fat: 1.2},
+            
+            {name: "السبانخ", calories: 23, protein: 2.9, carbs: 3.6, fat: 0.4},
+            {name: "البروكلي", calories: 34, protein: 2.8, carbs: 7, fat: 0.4},
+            {name: "الجزر", calories: 41, protein: 0.9, carbs: 10, fat: 0.2},
+            {name: "الطماطم", calories: 18, protein: 0.9, carbs: 3.9, fat: 0.2},
+            {name: "الخيار", calories: 16, protein: 0.7, carbs: 4, fat: 0.1},
+            {name: "الباذنجان", calories: 25, protein: 1, carbs: 6, fat: 0.2},
+            {name: "الفلفل الأحمر", calories: 31, protein: 1, carbs: 7, fat: 0.3},
+            {name: "البصل", calories: 40, protein: 1.1, carbs: 9, fat: 0.1},
+            {name: "الثوم", calories: 149, protein: 6.4, carbs: 33, fat: 0.5},
+            {name: "الكوسا", calories: 17, protein: 1.2, carbs: 3.1, fat: 0.3},
+            
+            {name: "صدر الدجاج", calories: 165, protein: 31, carbs: 0, fat: 3.6},
+            {name: "سمك السلمون", calories: 208, protein: 20, carbs: 0, fat: 13},
+            {name: "سمك التونة", calories: 144, protein: 30, carbs: 0, fat: 1},
+            {name: "البيض", calories: 155, protein: 13, carbs: 1.1, fat: 11},
+            {name: "اللحم البقري الأحمر", calories: 250, protein: 26, carbs: 0, fat: 15},
+            {name: "سمك المكاريل", calories: 205, protein: 19, carbs: 0, fat: 14},
+            {name: "الروبيان", calories: 99, protein: 18, carbs: 0.2, fat: 1.4},
+            {name: "سمك القد", calories: 82, protein: 18, carbs: 0, fat: 0.7},
+            {name: "لحم الديك الرومي", calories: 135, protein: 30, carbs: 0, fat: 1},
+            {name: "كبد البقر", calories: 191, protein: 29, carbs: 5, fat: 5},
+            
+            {name: "اللوز", calories: 579, protein: 21, carbs: 22, fat: 50},
+            {name: "الجوز", calories: 654, protein: 15, carbs: 14, fat: 65},
+            {name: "الفستق", calories: 560, protein: 20, carbs: 28, fat: 45},
+            {name: "بذور الشيا", calories: 486, protein: 17, carbs: 42, fat: 31},
+            {name: "بذور الكتان", calories: 534, protein: 18, carbs: 29, fat: 42},
+            {name: "بذور اليقطين", calories: 559, protein: 30, carbs: 11, fat: 49},
+            {name: "بذور عباد الشمس", calories: 584, protein: 21, carbs: 20, fat: 52},
+            {name: "الكاجو", calories: 553, protein: 18, carbs: 30, fat: 44},
+            {name: "البندق", calories: 628, protein: 15, carbs: 17, fat: 61},
+            {name: "الصنوبر", calories: 673, protein: 14, carbs: 13, fat: 68},
+            
+            {name: "الشوفان", calories: 389, protein: 17, carbs: 66, fat: 7},
+            {name: "الكينوا", calories: 368, protein: 14, carbs: 64, fat: 6},
+            {name: "الأرز البني", calories: 123, protein: 2.6, carbs: 23, fat: 0.9},
+            {name: "الخبز الأسمر", calories: 247, protein: 13, carbs: 41, fat: 4},
+            {name: "البرغل", calories: 342, protein: 12, carbs: 76, fat: 1.3},
+            {name: "الشعير", calories: 354, protein: 12, carbs: 73, fat: 2.3},
+            {name: "الذرة", calories: 86, protein: 3.3, carbs: 19, fat: 1.4},
+            {name: "الدخن", calories: 378, protein: 11, carbs: 73, fat: 4.2},
+            {name: "الحنطة السوداء", calories: 343, protein: 13, carbs: 72, fat: 3.4},
+            {name: "الأمارانث", calories: 371, protein: 14, carbs: 65, fat: 7},
+            
+            {name: "العدس", calories: 353, protein: 25, carbs: 60, fat: 1.1},
+            {name: "الحمص", calories: 378, protein: 20, carbs: 63, fat: 6},
+            {name: "الفاصوليا السوداء", calories: 341, protein: 21, carbs: 62, fat: 1.4},
+            {name: "الفاصوليا الحمراء", calories: 333, protein: 24, carbs: 60, fat: 0.8},
+            {name: "اللوبيا", calories: 336, protein: 24, carbs: 60, fat: 1.3},
+            {name: "فول الصويا", calories: 446, protein: 36, carbs: 30, fat: 20},
+            {name: "البازلاء", calories: 81, protein: 5.4, carbs: 14, fat: 0.4},
+            {name: "الفول المدمس", calories: 341, protein: 26, carbs: 58, fat: 1.5},
+            {name: "الترمس", calories: 371, protein: 36, carbs: 40, fat: 10},
+            {name: "البامية", calories: 33, protein: 1.9, carbs: 7, fat: 0.2},
+            
+            {name: "الزبادي اليوناني", calories: 59, protein: 10, carbs: 3.6, fat: 0.4},
+            {name: "الحليب قليل الدسم", calories: 42, protein: 3.4, carbs: 5, fat: 1},
+            {name: "جبن القريش", calories: 98, protein: 11, carbs: 3.4, fat: 4.3},
+            {name: "جبن الموزاريلا", calories: 280, protein: 28, carbs: 2.2, fat: 17},
+            {name: "الجبن الأبيض", calories: 264, protein: 18, carbs: 1.3, fat: 21},
+            {name: "اللبن الرائب", calories: 61, protein: 3.5, carbs: 4.7, fat: 3.3},
+            {name: "الكفير", calories: 41, protein: 3.3, carbs: 4.5, fat: 1},
+            {name: "جبن الفيتا", calories: 264, protein: 14, carbs: 4.1, fat: 21},
+            {name: "جبن الماعز", calories: 364, protein: 22, carbs: 2.5, fat: 30},
+            {name: "الزبدة الطبيعية", calories: 717, protein: 0.9, carbs: 0.1, fat: 81},
+            
+            {name: "زيت الزيتون", calories: 884, protein: 0, carbs: 0, fat: 100},
+            {name: "زيت جوز الهند", calories: 862, protein: 0, carbs: 0, fat: 100},
+            {name: "الأفوكادو", calories: 160, protein: 2, carbs: 9, fat: 15},
+            {name: "زيت الكانولا", calories: 884, protein: 0, carbs: 0, fat: 100},
+            {name: "زيت السمسم", calories: 884, protein: 0, carbs: 0, fat: 100},
+            {name: "زيت عباد الشمس", calories: 884, protein: 0, carbs: 0, fat: 100},
+            {name: "الطحينة", calories: 595, protein: 18, carbs: 18, fat: 54},
+            {name: "زبدة اللوز", calories: 614, protein: 21, carbs: 19, fat: 56},
+            {name: "زبدة الفول السوداني", calories: 588, protein: 22, carbs: 22, fat: 51},
+            {name: "هلام جوز الهند", calories: 230, protein: 2.3, carbs: 6, fat: 24},
+            
+            {name: "الشاي الأخضر", calories: 1, protein: 0.2, carbs: 0, fat: 0},
+            {name: "القهوة السوداء", calories: 2, protein: 0.3, carbs: 0, fat: 0},
+            {name: "الماء", calories: 0, protein: 0, carbs: 0, fat: 0},
+            {name: "ماء جوز الهند", calories: 19, protein: 0.7, carbs: 3.7, fat: 0.2},
+            {name: "عصير الليمون الطبيعي", calories: 22, protein: 0.4, carbs: 6.9, fat: 0.2},
+            {name: "الكمبوتشا", calories: 30, protein: 0, carbs: 7, fat: 0},
+            {name: "الشاي الأبيض", calories: 1, protein: 0, carbs: 0, fat: 0},
+            {name: "مرق الخضار", calories: 12, protein: 0.7, carbs: 2, fat: 0.2},
+            {name: "مرق العظام", calories: 31, protein: 5, carbs: 3, fat: 0.5},
+            {name: "الماء المنكه طبيعياً", calories: 0, protein: 0, carbs: 0, fat: 0}
+        ];
+
+        // بيانات الرياضيين المشاهير
+        const athletes = [
+            {
+                sport: "كرة القدم ⚽",
+                names: ["محمد صلاح", "صدقي موسى", "حسام حسن", "أحمد حسن", "محمود الخطيب", "عماد متعب", "أحمد فتحي", "وليد سليمان"]
+            },
+            {
+                sport: "السباحة 🏊‍♂️",
+                names: ["فريدة عثمان", "علي خلف الله", "مروان الكامل", "يوسف رمضان", "فرح عبد الله", "زياد بدر", "ملاك دراز", "نور الشربيني"]
+            },
+            {
+                sport: "الإسكواش 🎾",
+                names: ["علي فرج", "كريم عبد الجواد", "عمرو شبانة", "نور الشربيني", "رنيم الوليلي", "حبيبة علي", "يوسف إبراهيم", "مايار شرقاوي"]
+            },
+            {
+                sport: "رفع الأثقال 🏋️‍♂️",
+                names: ["محمد إيهاب", "سارة سمير", "شيماء عبد العليم", "كريم سليمان", "محمد ربيع", "طارق عبد الحميد", "إيمان السيد", "أحمد شاهين"]
+            },
+            {
+                sport: "الكاراتيه 🥋",
+                names: ["جيانا فاروق", "فريال أشرف", "علي الصاوي", "بسمة عمرو", "محمد الكيلاني", "أماني العبد", "ياسمين عطية", "أحمد شوقي"]
+            },
+            {
+                sport: "المصارعة 🤼‍♂️",
+                names: ["كرم جابر", "محمد كشكش", "أحمد مدحت", "عبد الرحمن إبراهيم", "محمد السيد", "إيمان عدلي", "سحر نصر", "أحمد فوزي"]
+            },
+            {
+                sport: "الملاكمة 🥊",
+                names: ["محمد ربيع", "عمار المصري", "يوسف الجندي", "حسام بكر", "إسلام تنتاوي", "محمود عبد العال", "كريم أشرف", "أحمد الشاذلي"]
+            },
+            {
+                sport: "ألعاب القوى 🏃‍♂️",
+                names: ["عمرو سيف", "نجلاء علي", "أحمد الجندي", "بسنت همام", "محمد حرب", "رشا طه", "محمود حميدة", "سارة أشرف"]
+            },
+            {
+                sport: "الجمباز 🤸‍♀️",
+                names: ["نور حسام", "آية صفوت", "محمد العربي", "مريم حمدي", "أحمد الطيب", "نادية أحمد", "عبد الله العزب", "هبة أشرف"]
+            },
+            {
+                sport: "كرة اليد 🤾‍♂️",
+                names: ["أحمد الأحمر", "كريم هنداوي", "محمد مجدي", "علي زين", "محمود حسام", "يحيى الدرع", "عمر إسماعيل", "محمد ماهر"]
+            },
+            {
+                sport: "كرة السلة 🏀",
+                names: ["رامي حنين", "مصطفى عرفة", "أحمد سامي", "محمود عبد العزيز", "كريم مرتضى", "عمر الشناوي", "أحمد إسماعيل", "محمد صبحي"]
+            },
+            {
+                sport: "كرة الطائرة 🏐",
+                names: ["أحمد عبد العال", "محمد رضا", "أحمد سامي", "عمر يسري", "محمود صلاح", "إسلام عز", "كريم مدحت", "محمد أبو الخير"]
+            },
+            {
+                sport: "الفروسية 🐎",
+                names: ["نايل نصار", "سميرة العسولي", "كريم الزغبي", "علياء حمزة", "عبد الرحمن حمزة", "ندى حافظ", "محمد عبد الحق", "مايا العسولي"]
+            },
+            {
+                sport: "رياضيون عرب مشاهير 🌟",
+                names: ["صدام حسين (العراق)", "هند دهب (السودان)", "معتز برشم (قطر)", "أحمد أكرم (الأردن)", "يوسف المساكني (تونس)", "رياض محرز (الجزائر)", "أشرف حكيمي (المغرب)", "حسن مأمون (لبنان)"]
+            }
+        ];
+
+        // دالة عرض الصفحات
+        function showPage(pageId) {
+            // إخفاء جميع الصفحات
+            const pages = document.querySelectorAll('.page');
+            pages.forEach(page => page.classList.remove('active'));
+            
+            // إزالة التفعيل من جميع الأزرار
+            const buttons = document.querySelectorAll('.nav-btn');
+            buttons.forEach(btn => btn.classList.remove('active'));
+            
+            // عرض الصفحة المطلوبة
+            document.getElementById(pageId).classList.add('active');
+            
+            // تفعيل الزر المطلوب
+            event.target.classList.add('active');
+            
+            // إعداد الصفحات عند عرضها
+            if (pageId === 'foods') {
+                displayFoods();
+            } else if (pageId === 'athletes') {
+                displayAthletes();
+            } else if (pageId === 'calculator') {
+                setupGenderListeners();
+            }
+        }
+
+        // دالة عرض الأطعمة
+        function displayFoods(filteredFoods = healthyFoods) {
+            const foodGrid = document.getElementById('foodGrid');
+            foodGrid.innerHTML = '';
+            
+            filteredFoods.forEach(food => {
+                const foodItem = document.createElement('div');
+                foodItem.className = 'food-item';
+                foodItem.innerHTML = `
+                    <div class="food-name">${food.name}</div>
+                    <div class="nutrition-info">
+                        <span>🔥 ${food.calories} سعرة</span>
+                        <span>💪 ${food.protein}g بروتين</span>
+                    </div>
+                    <div class="nutrition-info" style="margin-top: 8px;">
+                        <span>🍞 ${food.carbs}g كربوهيدرات</span>
+                        <span>🥑 ${food.fat}g دهون</span>
+                    </div>
+                `;
+                foodGrid.appendChild(foodItem);
+            });
+        }
+
+        // دالة البحث في الأطعمة
+        function filterFoods(searchTerm) {
+            const filteredFoods = healthyFoods.filter(food => 
+                food.name.includes(searchTerm)
+            );
+            displayFoods(filteredFoods);
+        }
+
+        // دالة عرض الرياضيين
+        function displayAthletes() {
+            const athletesGrid = document.getElementById('athletesGrid');
+            athletesGrid.innerHTML = '';
+            
+            athletes.forEach(category => {
+                const athleteCard = document.createElement('div');
+                athleteCard.className = 'athlete-card';
+                
+                let athletesList = category.names.map(name => 
+                    `<div class="athlete-name">${name}</div>`
+                ).join('');
+                
+                athleteCard.innerHTML = `
+                    <div class="sport-category">${category.sport}</div>
+                    ${athletesList}
+                `;
+                athletesGrid.appendChild(athleteCard);
+            });
+        }
+
+        // حاسبة السعرات الحرارية
+        function calculateCalories() {
+            const gender = document.querySelector('input[name="gender"]:checked').value;
+            const age = parseFloat(document.getElementById('age').value);
+            const weight = parseFloat(document.getElementById('weight').value);
+            const height = parseFloat(document.getElementById('height').value);
+            const activity = parseFloat(document.getElementById('activity').value);
+            
+            if (!age || !weight || !height) {
+                alert('يرجى إدخال جميع البيانات المطلوبة');
+                return;
+            }
+            
+            let bmr;
+            if (gender === 'male') {
+                bmr = 88.362 + (13.397 * weight) + (4.799 * height) - (5.677 * age);
+            } else {
+                bmr = 447.593 + (9.247 * weight) + (3.098 * height) - (4.330 * age);
+            }
+            
+            const tdee = bmr * activity;
+            
+            const result = document.getElementById('caloriesResult');
+            result.innerHTML = `
+                <div style="margin-bottom: 15px;">
+                    <strong>📊 النتائج:</strong>
+                </div>
+                <div style="background: rgba(255,255,255,0.9); padding: 15px; border-radius: 8px; margin: 10px 0;">
+                    🔥 معدل الأيض الأساسي (BMR): <strong>${Math.round(bmr)} سعرة حرارية</strong>
+                </div>
+                <div style="background: rgba(255,255,255,0.9); padding: 15px; border-radius: 8px; margin: 10px 0;">
+                    ⚡ إجمالي استهلاك الطاقة اليومي: <strong>${Math.round(tdee)} سعرة حرارية</strong>
+                </div>
+                <div style="background: rgba(255,255,255,0.9); padding: 15px; border-radius: 8px; margin: 10px 0; font-size: 14px;">
+                    💡 <strong>للتخسيس:</strong> ${Math.round(tdee - 500)} سعرة<br>
+                    💡 <strong>للثبات:</strong> ${Math.round(tdee)} سعرة<br>
+                    💡 <strong>لزيادة الوزن:</strong> ${Math.round(tdee + 500)} سعرة
+                </div>
+            `;
+            result.style.display = 'block';
+        }
+
+        // حاسبة مؤشر كتلة الجسم
+        function calculateBMI() {
+            const weight = parseFloat(document.getElementById('bmiWeight').value);
+            const height = parseFloat(document.getElementById('bmiHeight').value);
+            
+            if (!weight || !height) {
+                alert('يرجى إدخال الوزن والطول');
+                return;
+            }
+            
+            const heightM = height / 100;
+            const bmi = weight / (heightM * heightM);
+            
+            let category, className, advice;
+            if (bmi < 18.5) {
+                category = 'نقص في الوزن';
+                className = 'underweight';
+                advice = 'يُنصح بزيادة الوزن تدريجياً من خلال نظام غذائي صحي';
+            } else if (bmi < 25) {
+                category = 'وزن طبيعي';
+                className = 'normal';
+                advice = 'وزنك مثالي! استمر في المحافظة على نمط حياة صحي';
+            } else if (bmi < 30) {
+                category = 'زيادة في الوزن';
+                className = 'overweight';
+                advice = 'يُنصح بتقليل الوزن من خلال نظام غذائي ورياضة';
+            } else {
+                category = 'سمنة';
+                className = 'obese';
+                advice = 'يُنصح بتقليل الوزن تحت إشراف طبي';
+            }
+            
+            const result = document.getElementById('bmiResult');
+            result.innerHTML = `
+                <div style="margin-bottom: 15px;">
+                    <strong>📊 مؤشر كتلة الجسم: ${bmi.toFixed(1)}</strong>
+                </div>
+                <div class="bmi-category ${className}">
+                    ${category}
+                </div>
+                <div style="background: rgba(255,255,255,0.9); padding: 15px; border-radius: 8px; margin-top: 15px; font-size: 14px;">
+                    💡 <strong>التوصية:</strong><br>${advice}
+                </div>
+            `;
+            result.style.display = 'block';
+        }
+
+        // حاسبة البروتين
+        function calculateProtein() {
+            const weight = parseFloat(document.getElementById('proteinWeight').value);
+            const goal = parseFloat(document.getElementById('proteinGoal').value);
+            
+            if (!weight) {
+                alert('يرجى إدخال الوزن');
+                return;
+            }
+            
+            const protein = weight * goal;
+            
+            const result = document.getElementById('proteinResult');
+            result.innerHTML = `
+                <div style="margin-bottom: 15px;">
+                    <strong>💪 احتياجك اليومي من البروتين</strong>
+                </div>
+                <div style="background: rgba(255,255,255,0.9); padding: 15px; border-radius: 8px; margin: 10px 0;">
+                    <strong>${protein.toFixed(1)} جرام بروتين يومياً</strong>
+                </div>
+                <div style="background: rgba(255,255,255,0.9); padding: 15px; border-radius: 8px; margin: 10px 0; font-size: 14px;">
+                    💡 <strong>مصادر البروتين الجيدة:</strong><br>
+                    • صدر الدجاج (31g/100g)<br>
+                    • سمك السلمون (20g/100g)<br>
+                    • البيض (13g/100g)<br>
+                    • اللوز (21g/100g)
+                </div>
+            `;
+            result.style.display = 'block';
+        }
+
+        // حاسبة نسبة الدهون
+        function calculateBodyFat() {
+            const gender = document.querySelector('input[name="fatGender"]:checked').value;
+            const height = parseFloat(document.getElementById('fatHeight').value);
+            const neck = parseFloat(document.getElementById('neckCirc').value);
+            const waist = parseFloat(document.getElementById('waistCirc').value);
+            const hip = parseFloat(document.getElementById('hipCirc').value);
+            
+            if (!height || !neck || !waist) {
+                alert('يرجى إدخال جميع البيانات المطلوبة');
+                return;
+            }
+            
+            if (gender === 'female' && !hip) {
+                alert('يرجى إدخال محيط الوركين للنساء');
+                return;
+            }
+            
+            let bodyFat;
+            if (gender === 'male') {
+                bodyFat = 495 / (1.0324 - 0.19077 * Math.log10(waist - neck) + 0.15456 * Math.log10(height)) - 450;
+            } else {
+                bodyFat = 495 / (1.29579 - 0.35004 * Math.log10(waist + hip - neck) + 0.22100 * Math.log10(height)) - 450;
+            }
+            
+            let category, advice;
+            if (gender === 'male') {
+                if (bodyFat < 6) {
+                    category = 'منخفضة جداً (خطر)';
+                    advice = 'نسبة دهون منخفضة جداً، يُنصح باستشارة طبية';
+                } else if (bodyFat < 14) {
+                    category = 'رياضية ممتازة';
+                    advice = 'نسبة دهون ممتازة للرياضيين';
+                } else if (bodyFat < 18) {
+                    category = 'جيدة';
+                    advice = 'نسبة دهون صحية وجيدة';
+                } else if (bodyFat < 25) {
+                    category = 'مقبولة';
+                    advice = 'نسبة دهون مقبولة، يمكن تحسينها';
+                } else {
+                    category = 'عالية';
+                    advice = 'يُنصح بتقليل نسبة الدهون من خلال الرياضة والتغذية';
+                }
+            } else {
+                if (bodyFat < 16) {
+                    category = 'منخفضة جداً (خطر)';
+                    advice = 'نسبة دهون منخفضة جداً، يُنصح باستشارة طبية';
+                } else if (bodyFat < 20) {
+                    category = 'رياضية ممتازة';
+                    advice = 'نسبة دهون ممتازة للرياضيات';
+                } else if (bodyFat < 25) {
+                    category = 'جيدة';
+                    advice = 'نسبة دهون صحية وجيدة';
+                } else if (bodyFat < 32) {
+                    category = 'مقبولة';
+                    advice = 'نسبة دهون مقبولة، يمكن تحسينها';
+                } else {
+                    category = 'عالية';
+                    advice = 'يُنصح بتقليل نسبة الدهون من خلال الرياضة والتغذية';
+                }
+            }
+            
+            const result = document.getElementById('fatResult');
+            result.innerHTML = `
+                <div style="margin-bottom: 15px;">
+                    <strong>📏 نسبة الدهون في الجسم</strong>
+                </div>
+                <div style="background: rgba(255,255,255,0.9); padding: 15px; border-radius: 8px; margin: 10px 0;">
+                    <strong>${bodyFat.toFixed(1)}%</strong>
+                </div>
+                <div style="background: rgba(255,255,255,0.9); padding: 15px; border-radius: 8px; margin: 10px 0;">
+                    <strong>التصنيف:</strong> ${category}
+                </div>
+                <div style="background: rgba(255,255,255,0.9); padding: 15px; border-radius: 8px; margin: 10px 0; font-size: 14px;">
+                    💡 <strong>التوصية:</strong><br>${advice}
+                </div>
+            `;
+            result.style.display = 'block';
+        }
+
+        // إعداد مستمعي الأحداث للجنس
+        function setupGenderListeners() {
+            const fatGenderInputs = document.querySelectorAll('input[name="fatGender"]');
+            const hipInput = document.getElementById('hipCirc');
+            
+            fatGenderInputs.forEach(input => {
+                input.addEventListener('change', function() {
+                    if (this.value === 'female') {
+                        hipInput.style.display = 'block';
+                        hipInput.required = true;
+                    } else {
+                        hipInput.style.display = 'none';
+                        hipInput.required = false;
+                        hipInput.value = '';
+                    }
+                });
+            });
+        }
+
+        // تحميل الصفحة الأولى عند بدء التشغيل
+        window.onload = function() {
+            displayFoods();
+            setupGenderListeners();
+        };
+    </script>
+</body>
+</html>
